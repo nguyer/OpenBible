@@ -5,6 +5,7 @@
     xmlns:local="using:OpenBible"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vw="using:OpenBible.Views"
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -45,12 +46,8 @@
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-
-                <Grid>
-                    <FlipView Name="pageFlipView">
-                    </FlipView>
-                </Grid>
-            </SplitView.Content>
+				<vw:ChapterView DataContext="{Binding ActiveChapter}"/>
+			</SplitView.Content>
         </SplitView>
 
     </Grid>

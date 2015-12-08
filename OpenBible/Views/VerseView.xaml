@@ -1,0 +1,18 @@
+﻿<UserControl
+    x:Class="OpenBible.Views.VerseView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OpenBible.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="using:OpenBible.ViewModels"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+	d:DataContext="{d:DesignInstance Type=vm:VerseViewModel, IsDesignTimeCreatable=True}"
+	>
+	<TextBlock x:Name="content" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource BodyTextBlockStyle}">
+		<Run x:Name="number" Text="{Binding Number}" />
+		<Run x:Name="text" Text="{Binding Text}" />
+	</TextBlock>
+</UserControl>

@@ -102,21 +102,37 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\ApiResponse.cs" />
-    <Compile Include="Data\Chapter.cs" />
-    <Compile Include="Data\ChapterParser.cs" />
-    <Compile Include="Data\ChapterProvider.cs" />
-    <Compile Include="Data\Section.cs" />
-    <Compile Include="Data\Verse.cs" />
+    <Compile Include="Data\YouVersion\YouVersionApiResponse.cs" />
+    <Compile Include="Data\YouVersion\YouVersionChapterParser.cs" />
+    <Compile Include="Data\ITextProvider.cs" />
+    <Compile Include="Data\SearchParameters.cs" />
+    <Compile Include="Data\WebTextProvider.cs" />
+    <Compile Include="Data\YouVersion\YouVersionTextProvider.cs" />
     <Compile Include="HtmlToRtfConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPageViewModel.cs" />
+    <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="NewHtmlToRtfConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskNotifyCompletion.cs" />
-    <Compile Include="ViewModel\ChapterViewModel.cs" />
+    <Compile Include="ViewModels\ChapterViewModel.cs" />
+    <Compile Include="ViewModels\ParagraphViewModel.cs" />
+    <Compile Include="ViewModels\SectionViewModel.cs" />
+    <Compile Include="ViewModels\VerseViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\ChapterView.xaml.cs">
+      <DependentUpon>ChapterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ParagraphView.xaml.cs">
+      <DependentUpon>ParagraphView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SectionView.xaml.cs">
+      <DependentUpon>SectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VerseView.xaml.cs">
+      <DependentUpon>VerseView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -142,6 +158,22 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ChapterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ParagraphView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VerseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

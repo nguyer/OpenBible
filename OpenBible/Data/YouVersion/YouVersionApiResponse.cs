@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenBible.Data
+namespace OpenBible.Data.YouVersion
 {
-    public class ApiResponse
+    public class YouVersionApiResponse
     {
         public Response response
         {
@@ -47,14 +47,10 @@ namespace OpenBible.Data
                     set;
                 }
 
-                private string _content;
                 public string content
                 {
-                    get { return _content; }
-                    set
-                    {
-                        _content = "<body>" + value + "</body>";
-                    }
+					get;
+					set;
                 }
                 public List<Audio> audio
                 {

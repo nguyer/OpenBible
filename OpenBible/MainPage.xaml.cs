@@ -1,5 +1,5 @@
 ﻿using OpenBible.Data;
-using OpenBible.ViewModel;
+using OpenBible.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,7 @@ namespace OpenBible
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        ChapterViewModel chapterViewModel;
+        MainPageViewModel viewModel;
 
         public MainPage()
         {
@@ -35,29 +35,28 @@ namespace OpenBible
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            chapterViewModel = new ChapterViewModel(new Chapter(), pageFlipView);
-            DataContext = chapterViewModel;
+            viewModel = new MainPageViewModel();
+            DataContext = viewModel;
             //Window.Current.SizeChanged += new WindowSizeChangedEventHandler(sizeChangedHandler);
         }
 
         private void sizeChangedHandler(object sender, WindowSizeChangedEventArgs e)
         {
-            chapterViewModel.updateContent();
+
         }
 
         private void Button_Next_Click(object sender, RoutedEventArgs e)
         {
-            chapterViewModel.ChangeChapter(chapterViewModel.Chapter.NextChapterCode);
+			viewModel.ActiveChapterCode = viewModel.ActiveChapter.NextChapterCode;
         }
 
         private void Button_Previous_Click(object sender, RoutedEventArgs e)
         {
-            chapterViewModel.ChangeChapter(chapterViewModel.Chapter.PreviousChapterCode);
+			viewModel.ActiveChapterCode = viewModel.ActiveChapter.PreviousChapterCode;
         }
 
         private void Button_Browse_Click(object sender, RoutedEventArgs e)
         {
-            chapterViewModel.ChangeChapter(TextBoxChapterCode.Text);
         }
     }
 }
