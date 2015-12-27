@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
-	d:DataContext="{d:DesignInstance Type=vm:VerseViewModel, IsDesignTimeCreatable=True}"
+	d:DataContext="{d:DesignInstance Type=vm:VerseViewModel, IsDesignTimeCreatable=True}" ScrollViewer.VerticalScrollBarVisibility="Disabled"
 	>
 	<TextBlock x:Name="content" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource BodyTextBlockStyle}">
 		<Run x:Name="number" Text="{Binding Number}" />

@@ -102,6 +102,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VerseWrapPanel.cs" />
     <Compile Include="Data\YouVersion\YouVersionApiResponse.cs" />
     <Compile Include="Data\YouVersion\YouVersionChapterParser.cs" />
     <Compile Include="Data\ITextProvider.cs" />

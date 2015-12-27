@@ -13,18 +13,18 @@
 	d:DataContext="{d:DesignInstance Type=vm:ChapterViewModel, IsDesignTimeCreatable=True}">
 
 	<ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-		<StackPanel HorizontalAlignment="Stretch" Padding="0,25">
+		<StackPanel HorizontalAlignment="Stretch" Padding="20,40" ScrollViewer.VerticalScrollBarVisibility="Disabled">
 			<TextBlock x:Name="title" Style="{StaticResource TitleTextBlockStyle}">
 				<Run Text="{Binding BookName}"/>
 				<Run Text="{Binding Number}"/>
 			</TextBlock>
-			<ListView x:Name="sections" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding Sections}" SelectionMode="None">
-				<ListView.ItemTemplate>
+			<ItemsControl x:Name="sections" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding Sections}">
+				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<vw:SectionView/>
 					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 		</StackPanel>
 	</ScrollViewer>
 </UserControl>

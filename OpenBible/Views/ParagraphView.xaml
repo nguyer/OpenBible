@@ -10,13 +10,13 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
-	d:DataContext="{d:DesignInstance Type=vm:ParagraphViewModel, IsDesignTimeCreatable=True}">
+	d:DataContext="{d:DesignInstance Type=vm:ParagraphViewModel, IsDesignTimeCreatable=True}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
 
-	<ListView x:Name="verses" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding Verses}" SelectionMode="None">
-		<ListView.ItemTemplate>
+	<ItemsControl x:Name="verses" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding Verses}">
+		<ItemsControl.ItemTemplate>
 			<DataTemplate>
 				<vw:VerseView/>
 			</DataTemplate>
-		</ListView.ItemTemplate>
-	</ListView>
+		</ItemsControl.ItemTemplate>
+	</ItemsControl>
 </UserControl>

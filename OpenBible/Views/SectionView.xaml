@@ -14,12 +14,12 @@
 
 	<StackPanel>
 		<TextBlock Text="{Binding Title}" Style="{StaticResource SubtitleTextBlockStyle}"/>
-		<ListView x:Name="paragraphs" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding Paragraphs}" SelectionMode="None">
-			<ListView.ItemTemplate>
+		<ItemsControl x:Name="paragraphs" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding Paragraphs}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<vw:ParagraphView/>
 				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
 	</StackPanel>
 </UserControl>
