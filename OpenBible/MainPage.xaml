@@ -20,28 +20,57 @@
         </VisualStateGroup>
         </VisualStateManager.VisualStateGroups> 
 
-        <SplitView  x:Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
-               CompactPaneLength="50" OpenPaneLength="150">
+        <SplitView  x:Name="SideMenu" DisplayMode="CompactInline" IsPaneOpen="False" 
+               CompactPaneLength="50" OpenPaneLength="200">
             <SplitView.Pane>
                 <Grid VerticalAlignment="Top">
-                    <StackPanel>
-                        <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                            Width="50" Height="50" Background="Transparent"/>
-                        <TextBox Name="TextBoxChapterCode"></TextBox>
-                        <Button FontFamily="Segoe MDL2 Assets" Content="&#xE82D;"
-                             Width="50" Height="50" Background="Transparent"
-                                Click="Button_Browse_Click" RenderTransformOrigin="0.625,1.396"/>
-                        <Button FontFamily="Segoe MDL2 Assets" Content="&#xE734;"
-                             Width="50" Height="50" Background="Transparent"/>
-                        <Button FontFamily="Segoe MDL2 Assets" Content="&#xE787;"
-                             Width="50" Height="50" Background="Transparent"/>
-                        <Button FontFamily="Segoe MDL2 Assets" Content="&#xE00F;"
-                             Width="50" Height="50" Background="Transparent"
-                                    Click="Button_Next_Click"/>
-                        <Button FontFamily="Segoe MDL2 Assets" Content="&#xE00E;"
-                             Width="50" Height="50" Background="Transparent"
-                                    Click="Button_Previous_Click"/>
-                    </StackPanel>
+                    <ListBox Name="NavMenu" SelectionChanged="NavMenu_SelectionChanged">
+
+                        <ListBoxItem Padding="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="15">&#xE700;</TextBlock>
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold">OpenBible</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+
+                        <ListBoxItem Padding="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="15">&#xE82D;</TextBlock>
+                                <TextBlock VerticalAlignment="Center">Browse</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+
+                        <TextBox Name="TextBoxChapterCode" Width="165"></TextBox>
+
+                        <ListBoxItem Padding="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="15">&#xE734;</TextBlock>
+                                <TextBlock VerticalAlignment="Center">Bookmarks</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+
+                        <ListBoxItem Padding="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="15">&#xE787;</TextBlock>
+                                <TextBlock VerticalAlignment="Center">Reading Plan</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+
+                        <ListBoxItem Padding="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="15">&#xE00F;</TextBlock>
+                                <TextBlock VerticalAlignment="Center">Next Chapter</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+
+                        <ListBoxItem Padding="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Margin="15">&#xE00E;</TextBlock>
+                                <TextBlock VerticalAlignment="Center">Previous Chapter</TextBlock>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                    </ListBox>
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>

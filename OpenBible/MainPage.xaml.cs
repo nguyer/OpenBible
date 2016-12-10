@@ -47,23 +47,59 @@ namespace OpenBible
 
         private void Button_Next_Click(object sender, RoutedEventArgs e)
         {
-            if (chapterViewModel.Chapter.NextChapterCode != null)
-            {
-                chapterViewModel.ChangeChapter(chapterViewModel.Chapter.NextChapterCode);
-            }
+           
         }
 
         private void Button_Previous_Click(object sender, RoutedEventArgs e)
         {
-            if (chapterViewModel.Chapter.PreviousChapterCode != null)
-            {
-                chapterViewModel.ChangeChapter(chapterViewModel.Chapter.PreviousChapterCode);
-            }
+            
         }
 
         private void Button_Browse_Click(object sender, RoutedEventArgs e)
         {
             chapterViewModel.ChangeChapter(TextBoxChapterCode.Text);
+        }
+
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void NavMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = (ListBox)sender;
+            if (listBox.SelectedIndex != -1)
+            {
+                switch (listBox.SelectedIndex)
+                {
+                    case 0:
+                        // Hamburger Button
+                        SideMenu.IsPaneOpen = !SideMenu.IsPaneOpen;
+                        listBox.SelectedIndex = -1;
+                        return;
+                    case 2:
+                        // Browse
+                        chapterViewModel.ChangeChapter(TextBoxChapterCode.Text);
+                        break;
+                    case 5:
+                        // Next Chapter
+                        if (chapterViewModel.Chapter.NextChapterCode != null)
+                        {
+                            chapterViewModel.ChangeChapter(chapterViewModel.Chapter.NextChapterCode);
+                            SideMenu.IsPaneOpen = false;
+                        }
+                        break;
+                    case 6:
+                        // Previous Chapter
+                        if (chapterViewModel.Chapter.PreviousChapterCode != null)
+                        {
+                            chapterViewModel.ChangeChapter(chapterViewModel.Chapter.PreviousChapterCode);
+                            SideMenu.IsPaneOpen = false;
+                        }
+                        break;
+                }
+                listBox.SelectedIndex = -1;
+            }
         }
     }
 }
