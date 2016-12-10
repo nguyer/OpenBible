@@ -51,7 +51,7 @@ namespace OpenBible.ViewModel
             this.chapter = chapter;
             this.Overflows = new List<RichTextBlockOverflow>();
             //updateContent();
-            ChangeChapter("ROM.1");
+            ChangeChapter("jhn.9");
         }
 
         public async void ChangeChapter(string chapterCode)

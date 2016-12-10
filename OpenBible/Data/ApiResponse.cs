@@ -8,148 +8,154 @@ namespace OpenBible.Data
 {
     public class ApiResponse
     {
-        public Response response
+        public int reader_chapter
         {
             get;
             set;
         }
 
-        public class Response
+        public string reader_version
         {
-            public int code
+            get;
+            set;
+        }
+
+        private string _reader_html;
+        public string reader_html
+        {
+            get { return _reader_html; }
+            set
             {
-                get;
-                set;
-            }
-            public Data data
-            {
-                get;
-                set;
-            }
-
-            public String buildtime
-            {
-                get;
-                set;
-            }
-
-            public class Data
-            {
-                public Reference reference
-                {
-                    get;
-                    set;
-                }
-
-                public Copyright copyright
-                {
-                    get;
-                    set;
-                }
-
-                private string _content;
-                public string content
-                {
-                    get { return _content; }
-                    set
-                    {
-                        _content = "<body>" + value + "</body>";
-                    }
-                }
-                public List<Audio> audio
-                {
-                    get;
-                    set;
-                }
-                public Link previous
-                {
-                    get;
-                    set;
-                }
-                public Link next
-                {
-                    get;
-                    set;
-                }
-
-                public class Link
-                {
-                    public bool toc
-                    {
-                        get;
-                        set;
-                    }
-                    public string usfm
-                    {
-                        get;
-                        set;
-                    }
-                    public string human
-                    {
-                        get;
-                        set;
-                    }
-                    public bool canonical
-                    {
-                        get;
-                        set;
-                    }
-                }
-
-                public class Audio
-                {
-                    public Dictionary<String, String> download_urls
-                    {
-                        get;
-                        set;
-                    }
-                    public int id
-                    {
-                        get;
-                        set;
-                    }
-                    public int version_id
-                    {
-                        get;
-                        set;
-                    }
-                    public string title
-                    {
-                        get;
-                        set;
-                    }
-                }
-
-                public class Reference
-                {
-                    public string human
-                    {
-                        get;
-                        set;
-                    }
-                    public string usfm
-                    {
-                        get;
-                        set;
-                    }
-                }
-
-                public class Copyright
-                {
-                    public string text
-                    {
-                        get;
-                        set;
-                    }
-                    public string html
-                    {
-                        get;
-                        set;
-                    }
-                }
+                _reader_html = "<body>" + value + "</body>";
             }
         }
 
+        public string to_path
+        {
+            get;
+            set;
+        }
 
+        public ChapterHash previous_chapter_hash
+        {
+            get;
+            set;
+        }
+
+        public ChapterHash next_chapter_hash
+        {
+            get;
+            set;
+        }
+
+        public ReaderAudio reader_audio
+        {
+            get;
+            set;
+        }
+
+        public string reader_book
+        {
+            get;
+            set;
+        }
+
+        public string human
+        {
+            get;
+            set;
+        }
+
+        public class ChapterHash
+        {
+            public bool toc
+            {
+                get;
+                set;
+            }
+            public bool canonical
+            {
+                get;
+                set;
+            }
+            public int version_id
+            {
+                get;
+                set;
+            }
+            public string human
+            {
+                get;
+                set;
+            }
+            public List<string> usfm
+            {
+                get;
+                set;
+            }
+        }
+
+        public class ReaderAudio
+        {
+            public Dictionary<string, string> download_urls
+            {
+                get;
+                set;
+            }
+            public bool timing_available
+            {
+                get;
+                set;
+            }
+            public int id
+            {
+                get;
+                set;
+            }
+            public int version_id
+            {
+                get;
+                set;
+            }
+            public string title
+            {
+                get;
+                set;
+            }
+            public Copyright copyright_long
+            {
+                get;
+                set;
+            }
+            public Copyright copyright_short
+            {
+                get;
+                set;
+            }
+            public string publisher_link
+            {
+                get;
+                set;
+            }
+            public string url
+            {
+                get;
+                set;
+            }
+
+            public class Copyright
+            {
+                public string text
+                {
+                    get;
+                    set;
+                }
+                public string html
+                {
+                    get;
+                    set;
+                }
+            }
+        }
     }
 }

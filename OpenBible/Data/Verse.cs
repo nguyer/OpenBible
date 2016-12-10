@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +11,13 @@ namespace OpenBible.Data
     {
         public Verse()
         {
-
+            this.TextSpans = new List<TextSpan>();
         }
 
-        public Verse(int number, string text)
+        public Verse(int number, List<TextSpan> textSpans)
         {
             this.Number = number;
-            this.Text = text;
+            this.TextSpans = textSpans;
         }
 
         public int Number
@@ -25,7 +26,7 @@ namespace OpenBible.Data
             set;
         }
 
-        public string Text
+        public List<TextSpan> TextSpans
         {
             get;
             set;

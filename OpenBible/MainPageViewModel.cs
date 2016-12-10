@@ -16,8 +16,8 @@ namespace OpenBible
         public MainPageViewModel()
         {
             //Html = "<body></body>".Replace("\n", "");
-            ChapterName = "Romans 1";
-            getChapterText("ROM.1");
+            ChapterName = "John 9";
+            getChapterText("JHN.9");
         }
 
         private async void getChapterText(string chapterCode)

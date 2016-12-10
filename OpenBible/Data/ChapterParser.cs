@@ -62,7 +62,7 @@ namespace OpenBible.Data
                             else if (e.GetAttribute("class") == "label" && element.GetAttribute("class").Contains("chapter"))
                             {
                                 // Set chapter name
-                                chapter.BookName = e.InnerText;
+                                //chapter.BookName = e.InnerText;
 
                             }
                             else
@@ -86,10 +86,14 @@ namespace OpenBible.Data
                             }
                             else if (e.GetAttribute("class") == "content" && element.GetAttribute("class").Contains("verse"))
                             {
-                                if (chapter.Verses.Last().Text == null)
+                                if (chapter.Verses.Last().TextSpans == null || chapter.Verses.Last().TextSpans.Count == 0)
                                 {
-                                    chapter.Verses.Last().Text = e.InnerText;
+                                    chapter.Verses.Last().TextSpans.Add(new TextSpan(e.InnerText));
                                 }
+                            }
+                            else if (e.GetAttribute("class") == "wj" && element.GetAttribute("class").Contains("verse"))
+                            {
+                                chapter.Verses.Last().TextSpans.Add(new WordsOfJesus(e.InnerText));
                             }
                             else
                             {

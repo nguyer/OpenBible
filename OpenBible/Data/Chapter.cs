@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Media;
 
 namespace OpenBible.Data
 {
@@ -47,6 +48,15 @@ namespace OpenBible.Data
         {
             List<Block> blocks = new List<Block>();
 
+            Paragraph chapterHeader = new Paragraph();
+            chapterHeader.FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI");
+            chapterHeader.FontSize = 30;
+            chapterHeader.Margin = new Thickness(0, 10, 0, 5);
+            Run chapterHeaderRun = new Run();
+            chapterHeaderRun.Text = this.BookName + " " + this.Number;
+            chapterHeader.Inlines.Add(chapterHeaderRun);
+            blocks.Add(chapterHeader);
+
             foreach (Section section in Sections)
             {
                 Paragraph paragraph = new Paragraph();
@@ -74,9 +84,16 @@ namespace OpenBible.Data
                         verseLabel.FontSize = 8;
                         verses.Inlines.Add(verseLabel);
 
-                        Run verseContent = new Run();
-                        verseContent.Text = verse.Text;
-                        verses.Inlines.Add(verseContent);
+                        foreach (TextSpan textSpan in verse.TextSpans)
+                        {
+                            Run spanRun = new Run();
+                            if ((textSpan.GetType() == typeof(WordsOfJesus)))
+                            {
+                                spanRun.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 200, 0, 0));
+                            }
+                            spanRun.Text = textSpan.Text;
+                            verses.Inlines.Add(spanRun);
+                        }
                     }
                     blocks.Add(verses);
                 }

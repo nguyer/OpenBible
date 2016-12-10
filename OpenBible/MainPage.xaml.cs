@@ -47,12 +47,18 @@ namespace OpenBible
 
         private void Button_Next_Click(object sender, RoutedEventArgs e)
         {
-            chapterViewModel.ChangeChapter(chapterViewModel.Chapter.NextChapterCode);
+            if (chapterViewModel.Chapter.NextChapterCode != null)
+            {
+                chapterViewModel.ChangeChapter(chapterViewModel.Chapter.NextChapterCode);
+            }
         }
 
         private void Button_Previous_Click(object sender, RoutedEventArgs e)
         {
-            chapterViewModel.ChangeChapter(chapterViewModel.Chapter.PreviousChapterCode);
+            if (chapterViewModel.Chapter.PreviousChapterCode != null)
+            {
+                chapterViewModel.ChangeChapter(chapterViewModel.Chapter.PreviousChapterCode);
+            }
         }
 
         private void Button_Browse_Click(object sender, RoutedEventArgs e)
