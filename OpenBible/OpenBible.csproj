@@ -102,8 +102,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\OldApiResponse.cs" />
-    <Compile Include="Data\ApiResponse.cs" />
+    <Compile Include="Data\VersionApiResponse.cs" />
+    <Compile Include="Data\ChapterApiResponse.cs" />
     <Compile Include="Data\Chapter.cs" />
     <Compile Include="Data\ChapterParser.cs" />
     <Compile Include="Data\ChapterProvider.cs" />

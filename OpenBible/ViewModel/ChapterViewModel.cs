@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
@@ -50,14 +51,31 @@ namespace OpenBible.ViewModel
             this.flipView = flipView;
             this.chapter = chapter;
             this.Overflows = new List<RichTextBlockOverflow>();
-            //updateContent();
-            ChangeChapter("jhn.9");
+            //Html = "<body></body>".Replace("\n", "");
+
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            string currentChapter = (string)localSettings.Values["currentChapter"];
+            if (currentChapter == null || currentChapter == "")
+            {
+                currentChapter = "jhn.1.esv";
+            }
+            ChangeChapter(currentChapter);
         }
 
         public async void ChangeChapter(string chapterCode)
         {
-            this.chapter = await ChapterProvider.GetChapter(chapterCode);
-            updateContent();
+            try
+            {
+                this.chapter = await ChapterProvider.GetChapter(chapterCode);
+                Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                localSettings.Values["currentChapter"] = chapterCode;
+                updateContent();
+            }
+            catch (Exception e)
+            {
+                var dialog = new MessageDialog("Unable to load chapter. Check your internet connection?");
+                await dialog.ShowAsync();
+            }
         }
 
         public void updateContent()
@@ -126,10 +144,10 @@ namespace OpenBible.ViewModel
                                 flipView.SelectedIndex = i;
                             }
                                 
-                            for (int j = i+1; j < Overflows.Count; j++)
+                            while(Overflows.Count > i)
                             {
-                                flipView.Items.Remove(Overflows[j]);
-                                Overflows.RemoveAt(j);
+                                flipView.Items.Remove(flipView.Items.Last());
+                                Overflows.Remove(Overflows.Last());
                             }
                             break;
                         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Json;
+using Windows.Storage;
 using Windows.UI.Xaml.Documents;
 
 namespace OpenBible.Data
@@ -21,29 +23,37 @@ namespace OpenBible.Data
             return await response.Content.ReadAsStringAsync();
         }
 
-        public static async Task<ApiResponse> MakeApiRequest(string chapterCode)
+        public static async Task<ChapterApiResponse> MakeApiRequest(string chapterCode)
         {
-            //string rawResponse = await MakeWebRequest("https://www.bible.com/bible/59/" + chapterCode + ".json");
-            //DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ApiResponse));
-            //MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(@rawResponse));
-            //ApiResponse response = (ApiResponse)serializer.ReadObject(ms);
-            //return response;
+            string json;
+            var applicationData = Windows.Storage.ApplicationData.Current;
+            var localCacheFolder = applicationData.LocalCacheFolder;
 
-            string requestUrl = "https://www.bible.com/bible/59/" + chapterCode + ".json";
-            HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
-            using (HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse)
+            StorageFile cacheFile = (StorageFile) await localCacheFolder.TryGetItemAsync(chapterCode + ".json");
+            if (cacheFile != null)
             {
-                if (response.StatusCode != HttpStatusCode.OK)
-                    throw new Exception(String.Format(
-                    "Server error (HTTP {0}: {1}).",
-                    response.StatusCode,
-                    response.StatusDescription));
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(ApiResponse));
-                object objResponse = jsonSerializer.ReadObject(response.GetResponseStream());
-                ApiResponse jsonResponse = objResponse as ApiResponse;
-                return jsonResponse;
+                json = await FileIO.ReadTextAsync(cacheFile);
             }
+            else
+            {
+                string requestUrl = "https://www.bible.com/bible/59/" + chapterCode + ".json";
+                HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
+                using (HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse)
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw new Exception(String.Format(
+                        "Server error (HTTP {0}: {1}).",
+                        response.StatusCode,
+                        response.StatusDescription));
+                    }
+                    json = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                    StorageFile sampleFile = await localCacheFolder.CreateFileAsync(chapterCode + ".json");
+                    await FileIO.WriteTextAsync(sampleFile, json);
 
+                }
+            }
+            return JsonConvert.DeserializeObject<ChapterApiResponse>(json); ;
         }
 
         public static async Task<string> GetChapterText(string chapterCode)
@@ -53,11 +63,12 @@ namespace OpenBible.Data
 
         public static async Task<Chapter> GetChapter(string chapterCode)
         {
-            ApiResponse response = await MakeApiRequest(chapterCode);
+            ChapterApiResponse response = await MakeApiRequest(chapterCode);
             Chapter chapter = ChapterParser.ParseChapter(response.reader_html);
             chapter.BookName = response.reader_book;
             chapter.Number = response.reader_chapter;
             chapter.ChapterCode = chapterCode;
+
             if (response.next_chapter_hash != null && response.next_chapter_hash.usfm.Count > 0)
             {
                 chapter.NextChapterCode = response.next_chapter_hash.usfm[0];

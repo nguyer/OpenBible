@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenBible.Data
 {
-    public class ApiResponse
+    public class ChapterApiResponse
     {
         public int reader_chapter
         {
