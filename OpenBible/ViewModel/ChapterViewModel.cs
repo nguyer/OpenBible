@@ -51,7 +51,6 @@ namespace OpenBible.ViewModel
             this.flipView = flipView;
             this.chapter = chapter;
             this.Overflows = new List<RichTextBlockOverflow>();
-            //Html = "<body></body>".Replace("\n", "");
 
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             string currentChapter = (string)localSettings.Values["currentChapter"];
@@ -73,7 +72,7 @@ namespace OpenBible.ViewModel
             }
             catch (Exception e)
             {
-                var dialog = new MessageDialog("Unable to load chapter. Check your internet connection?");
+                var dialog = new MessageDialog("Unable to load chapter. Check your internet connection?\n\n More detail: " + e.Message);
                 await dialog.ShowAsync();
             }
         }

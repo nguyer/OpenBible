@@ -108,7 +108,6 @@
     <Compile Include="Data\ChapterParser.cs" />
     <Compile Include="Data\ChapterProvider.cs" />
     <Compile Include="Data\Section.cs" />
-    <Compile Include="Data\WordsOfJesus.cs" />
     <Compile Include="Data\TextSpan.cs" />
     <Compile Include="Data\Verse.cs" />
     <Compile Include="HtmlToRtfConverter.cs" />

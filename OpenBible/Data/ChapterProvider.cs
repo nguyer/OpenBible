@@ -16,6 +16,8 @@ namespace OpenBible.Data
 {
     public class ChapterProvider
     {
+        private static StorageFolder localCacheFolder = Windows.Storage.ApplicationData.Current.LocalCacheFolder;
+
         private static async Task<string> MakeWebRequest(string url)
         {
             HttpClient http = new HttpClient();
@@ -23,47 +25,64 @@ namespace OpenBible.Data
             return await response.Content.ReadAsStringAsync();
         }
 
-        public static async Task<ChapterApiResponse> MakeApiRequest(string chapterCode)
+        public static async Task<ChapterApiResponse> GetChapterApiResponse(string chapterCode)
         {
             string json;
-            var applicationData = Windows.Storage.ApplicationData.Current;
-            var localCacheFolder = applicationData.LocalCacheFolder;
-
-            StorageFile cacheFile = (StorageFile) await localCacheFolder.TryGetItemAsync(chapterCode + ".json");
-            if (cacheFile != null)
+            if (await IsJsonCached(chapterCode))
             {
-                json = await FileIO.ReadTextAsync(cacheFile);
+                json = await GetJsonFromCache(chapterCode);
+                if (json == null || json == "")
+                {
+                    json = await GetJsonFromApi(chapterCode);
+                    WriteJsonToCache(chapterCode, json);
+                }
             }
             else
             {
-                string requestUrl = "https://www.bible.com/bible/59/" + chapterCode + ".json";
-                HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
-                using (HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse)
-                {
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        throw new Exception(String.Format(
-                        "Server error (HTTP {0}: {1}).",
-                        response.StatusCode,
-                        response.StatusDescription));
-                    }
-                    json = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                    StorageFile sampleFile = await localCacheFolder.CreateFileAsync(chapterCode + ".json");
-                    await FileIO.WriteTextAsync(sampleFile, json);
-
-                }
+                json = await GetJsonFromApi(chapterCode);
+                WriteJsonToCache(chapterCode, json);
             }
-            return JsonConvert.DeserializeObject<ChapterApiResponse>(json); ;
+            return JsonConvert.DeserializeObject<ChapterApiResponse>(json);
         }
 
-        public static async Task<string> GetChapterText(string chapterCode)
+        public static async Task<string> GetJsonFromApi(string chapterCode)
         {
-            return (await MakeApiRequest(chapterCode)).reader_html;
+            string requestUrl = "https://www.bible.com/bible/59/" + chapterCode + ".json";
+            HttpWebRequest request = WebRequest.Create(requestUrl) as HttpWebRequest;
+            using (HttpWebResponse response = await request.GetResponseAsync() as HttpWebResponse)
+            {
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception(String.Format(
+                    "Server error (HTTP {0}: {1}).",
+                    response.StatusCode,
+                    response.StatusDescription));
+                }
+                return new StreamReader(response.GetResponseStream()).ReadToEnd();
+            }
+        }
+
+        private static async Task<String> GetJsonFromCache(string chapterCode)
+        {
+            StorageFile file = (StorageFile)await localCacheFolder.TryGetItemAsync(chapterCode + ".json");
+            return await FileIO.ReadTextAsync(file);
+        }
+
+        private static async void WriteJsonToCache(string chapterCode, string json)
+        {
+            StorageFile file = await localCacheFolder.CreateFileAsync(chapterCode + ".json", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, json);
+        }
+
+        private static async Task<bool> IsJsonCached(string chapterCode)
+        {
+            StorageFile file = (StorageFile) await localCacheFolder.TryGetItemAsync(chapterCode + ".json");
+            return file != null;
         }
 
         public static async Task<Chapter> GetChapter(string chapterCode)
         {
-            ChapterApiResponse response = await MakeApiRequest(chapterCode);
+            ChapterApiResponse response = await GetChapterApiResponse(chapterCode);
             Chapter chapter = ChapterParser.ParseChapter(response.reader_html);
             chapter.BookName = response.reader_book;
             chapter.Number = response.reader_chapter;
@@ -78,11 +97,6 @@ namespace OpenBible.Data
                 chapter.PreviousChapterCode = response.previous_chapter_hash.usfm[0];
             }
             return chapter;
-        }
-
-        public static async Task<BlockCollection> GetChapterRtf(string chapterCode)
-        {
-            return NewHtmlToRtfConverter.ConvertHtmlToRtf(await GetChapterText(chapterCode));
         }
     }
 }

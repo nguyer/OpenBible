@@ -25,12 +25,12 @@ namespace OpenBible.Data
             XmlDocument document = new XmlDocument();
             document.LoadXml(html);
 
-            ParseElement((XmlElement)(document.GetElementsByTagName("body")[0]), chapter);
+            ParseElement((XmlElement)(document.GetElementsByTagName("body")[0]), chapter, Style.NORMAL);
 
             return chapter;
         }
 
-        private static void ParseElement(XmlElement element, Chapter chapter)
+        private static void ParseElement(XmlElement element, Chapter chapter, Style currentTextStyle)
         {
             foreach (var child in element.ChildNodes)
             {
@@ -41,10 +41,6 @@ namespace OpenBible.Data
                     {
                         continue;
                     }
-
-                    // Add a verse?
-
-                    //parent.Add(new Run { Text = ((XmlText)child).InnerText });
                 }
                 else if (child is XmlElement)
                 {
@@ -56,81 +52,66 @@ namespace OpenBible.Data
                             {
                                 // Start of a new paragraph
                                 chapter.Sections.Add(new Section());
-                                ParseElement(e, chapter);
-
+                                ParseElement(e, chapter, currentTextStyle);
                             }
-                            else if (e.GetAttribute("class") == "label" && element.GetAttribute("class").Contains("chapter"))
+                            if (e.GetAttribute("class") == "s1")
                             {
-                                // Set chapter name
-                                //chapter.BookName = e.InnerText;
-
+                                // New heading section
+                                chapter.Sections.Add(new Section());
+                                ParseElement(e, chapter, currentTextStyle);
                             }
                             else
                             {
-                                ParseElement(e, chapter);
+                                ParseElement(e, chapter, currentTextStyle);
                             }
                             break;
                         case "SPAN":
-                            //ParseElement(e, parent);
-
-                            if (e.GetAttribute("class") == "heading")
+                            if (e.GetAttribute("class") == "heading" && element.GetAttribute("class").Contains("s1")) //(e.GetAttribute("class") == "heading")
                             {
-                                chapter.Sections.Add(new Section(e.InnerText));
+                                chapter.Sections.Last().Heading.Add(new TextSpan(e.InnerText, currentTextStyle));
                             }
                             else if (e.GetAttribute("class") == "label" && element.GetAttribute("class").Contains("verse"))
                             {
                                 Verse verse = new Verse();
                                 verse.Number = int.Parse(e.InnerText);
                                 chapter.Verses.Add(verse);
+                                if (chapter.Sections.Count == 0)
+                                {
+                                    chapter.Sections.Add(new Section());
+                                }
                                 chapter.Sections.Last().Verses.Add(verse);
                             }
                             else if (e.GetAttribute("class") == "content" && element.GetAttribute("class").Contains("verse"))
                             {
-                                if (chapter.Verses.Last().TextSpans == null || chapter.Verses.Last().TextSpans.Count == 0)
-                                {
-                                    chapter.Verses.Last().TextSpans.Add(new TextSpan(e.InnerText));
-                                }
+                                chapter.Verses.Last().TextSpans.Add(new TextSpan(e.InnerText, currentTextStyle));
+                            }
+                            else if (e.GetAttribute("class") == "content" && element.GetAttribute("class").Contains("nd"))
+                            {
+                                chapter.Verses.Last().TextSpans.Add(new TextSpan(e.InnerText, Style.NAME_OF_GOD));
+                            }
+                            else if (e.GetAttribute("class") == "heading" && element.GetAttribute("class").Contains("nd"))
+                            {
+                                //chapter.Sections.Last().Heading.Add(new TextSpan(e.InnerText, Style.NAME_OF_GOD));
+                            }
+                            else if (element.GetAttribute("class") == "q1" && e.GetAttribute("class").Contains("verse"))
+                            {
+                                ParseElement(e, chapter, Style.QUOTE1);
+                            }
+                            else if (element.GetAttribute("class") == "q2" && e.GetAttribute("class").Contains("verse"))
+                            {
+                                ParseElement(e, chapter, Style.QUOTE2);
                             }
                             else if (e.GetAttribute("class") == "wj" && element.GetAttribute("class").Contains("verse"))
                             {
-                                chapter.Verses.Last().TextSpans.Add(new WordsOfJesus(e.InnerText));
+                                chapter.Verses.Last().TextSpans.Add(new TextSpan(e.InnerText, Style.WORDS_OF_JESUS));
                             }
                             else
                             {
-                                ParseElement(e, chapter);
+                                ParseElement(e, chapter, currentTextStyle);
                             }
-                            //else
-                            //{
-                            //    Run run = new Run();
-                            //    run.Text = e.InnerText;
-                            //    parent.Add(run);
-                            //}
                             break;
-                        //case "P":
-                        //    var p = new Paragraph();
-                        //    parent.Add(p);
-                        //    ParseElement(e, new ParagraphTextContainer(p));
-                        //    break;
-                        //case "STRONG":
-                        //    var bold = new Bold();
-                        //    parent.Add(bold);
-                        //    ParseElement(e, new SpanTextContainer(bold));
-                        //    break;
-                        //case "U":
-                        //    var underline = new Underline();
-                        //    parent.Add(underline);
-                        //    ParseElement(e, new SpanTextContainer(underline));
-                        //    break;
-                        //case "A":
-                        //    ParseElement(e, parent);
-                        //    break;
-                        //case "BR":
-                        //    parent.Add(new LineBreak());
-                        //    break;
                     }
                 }
-
-
             }
         }
     }

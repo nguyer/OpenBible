@@ -59,47 +59,88 @@ namespace OpenBible.Data
 
             foreach (Section section in Sections)
             {
-                Paragraph paragraph = new Paragraph();
+                Paragraph paragraph = getNewParagraph();
+                blocks.Add(paragraph);
                 if (section.Heading != null)
                 {
                     Paragraph header = new Paragraph();
                     header.FontFamily = new Windows.UI.Xaml.Media.FontFamily("Segoe UI");
                     header.FontSize = 20;
                     header.Margin = new Thickness(0, 10, 0, 5);
-                    Run run = new Run();
-                    run.Text = section.Heading;
-                    header.Inlines.Add(run);
-                    blocks.Add(header);
+                    foreach (TextSpan textSpan in section.Heading)
+                    {
+                        Run run = new Run();
+                        run.Text = textSpan.Text;
+                        if (textSpan.Style == Style.NAME_OF_GOD)
+                        {
+                            Typography.SetCapitals(run, FontCapitals.SmallCaps);
+                        }
+                        header.Inlines.Add(run);
+                        blocks.Add(header);
+                    }
                 }
                 if (section.Verses.Count > 0)
                 {
-                    Paragraph verses = new Paragraph();
-                    verses.FontFamily = new Windows.UI.Xaml.Media.FontFamily("Cambria");
-                    verses.FontSize = 16;
-                    verses.LineHeight = 25;
                     foreach (Verse verse in section.Verses)
                     {
+                        // Correctly align verse number with indented text
+                        if (verse.TextSpans.First().Style == Style.QUOTE1)
+                        {
+                            paragraph = getNewParagraph();
+                            blocks.Add(paragraph);
+                            paragraph.TextIndent = 25;
+                        }
+                        else if (verse.TextSpans.First().Style == Style.QUOTE2)
+                        {
+                            paragraph = getNewParagraph();
+                            blocks.Add(paragraph);
+                            paragraph.TextIndent = 50;
+                        }
                         Run verseLabel = new Run();
                         verseLabel.Text = verse.Number.ToString();
                         verseLabel.FontSize = 8;
-                        verses.Inlines.Add(verseLabel);
+                        paragraph.Inlines.Add(verseLabel);
 
                         foreach (TextSpan textSpan in verse.TextSpans)
                         {
                             Run spanRun = new Run();
-                            if ((textSpan.GetType() == typeof(WordsOfJesus)))
+                            if (textSpan.Style == Style.WORDS_OF_JESUS)
                             {
                                 spanRun.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 200, 0, 0));
                             }
+                            else if (textSpan.Style == Style.NAME_OF_GOD)
+                            {
+                                Typography.SetCapitals(spanRun, FontCapitals.SmallCaps);
+                            }
+                            else if (textSpan.Style == Style.QUOTE1 && !textSpan.Equals(verse.TextSpans.First()))
+                            {
+                                paragraph = getNewParagraph();
+                                blocks.Add(paragraph);
+                                paragraph.TextIndent = 25;
+                            }
+                            if (textSpan.Style == Style.QUOTE2)
+                            {
+                                paragraph = getNewParagraph();
+                                blocks.Add(paragraph);
+                                paragraph.TextIndent = 50;
+                            }
                             spanRun.Text = textSpan.Text;
-                            verses.Inlines.Add(spanRun);
+                            paragraph.Inlines.Add(spanRun);
                         }
+
                     }
-                    blocks.Add(verses);
                 }
-                blocks.Add(paragraph);
             }
             return blocks;
+        }
+
+        private Paragraph getNewParagraph()
+        {
+            Paragraph paragraph = new Paragraph();
+            paragraph.FontFamily = new Windows.UI.Xaml.Media.FontFamily("Cambria");
+            paragraph.FontSize = 16;
+            paragraph.LineHeight = 25;
+            return paragraph;
         }
 
         public string BookName

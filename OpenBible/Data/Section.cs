@@ -10,22 +10,23 @@ namespace OpenBible.Data
     {
         public Section()
         {
+            Heading = new List<TextSpan>();
             Verses = new List<Verse>();
         }
 
-        public Section(string heading)
+        public Section(List<TextSpan> heading)
         {
             Heading = heading;
             Verses = new List<Verse>();
         }
 
-        public Section(string heading, List<Verse> verses)
+        public Section(List<TextSpan> heading, List<Verse> verses)
         {
             Heading = heading;
             Verses = verses;
         }
 
-        public string Heading
+        public List<TextSpan> Heading
         {
             get;
             set;

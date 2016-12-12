@@ -18,11 +18,6 @@ namespace OpenBible
            
         }
 
-        private async void getChapterText(string chapterCode)
-        {
-            Html = await ChapterProvider.GetChapterText(chapterCode);
-        }
-
         public string Html
         {
             get;
